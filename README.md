@@ -34,6 +34,7 @@ O candidato deve implementar uma aplicação completa de gerenciamento de tarefa
 - **Concurrently** - Execução paralela de comandos
 - **Laravel Pail** - Log viewer
 - **PHPUnit** - Testes unitários
+- **Docker & Docker Compose** - Containerização
 
 ## Estrutura do Projeto
 
@@ -56,6 +57,7 @@ O candidato deve implementar uma aplicação completa de gerenciamento de tarefa
 ├── routes/
 │   ├── web.php             # Rotas web
 │   └── api.php             # Rotas da API
+├── docker-compose.yml      # Configuração Docker
 └── public/webflow/         # Referência de design
 ```
 
@@ -183,13 +185,81 @@ O candidato deve implementar uma aplicação completa de gerenciamento de tarefa
 
 ## Configuração e Execução
 
-### Pré-requisitos
+### Opção 1: Docker (Recomendado)
+
+#### Pré-requisitos
+- Docker
+- Docker Compose
+
+#### Instalação com Docker
+
+**Opção A: Setup Automático (Recomendado)**
+```bash
+git clone <repository-url>
+cd my-app
+./docker-setup.sh
+```
+
+**Opção B: Setup Manual**
+1. **Clone o repositório e configure o ambiente:**
+   ```bash
+   git clone <repository-url>
+   cd my-app
+   cp .env.example .env
+   ```
+
+2. **Inicie os containers:**
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Execute as migrações e seeders:**
+   ```bash
+   docker-compose exec laravel.test php artisan migrate
+   docker-compose exec laravel.test php artisan db:seed
+   ```
+
+4. **Acesse a aplicação:**
+   - **Laravel Backend**: http://localhost:80
+   - **Vue.js Frontend**: http://localhost:5173
+   - **Node.js Dev Server**: http://localhost:3000
+
+#### Serviços Docker Disponíveis
+
+- **laravel.test**: Servidor Laravel (PHP 8.2 + Apache)
+- **node**: Servidor Node.js para desenvolvimento Vue.js
+- **queue**: Worker de filas Laravel
+
+#### Comandos Docker Úteis
+
+```bash
+# Ver logs dos containers
+docker-compose logs -f
+
+# Executar comandos no container Laravel
+docker-compose exec laravel.test php artisan migrate
+docker-compose exec laravel.test composer install
+
+# Executar comandos no container Node.js
+docker-compose exec node npm install
+docker-compose exec node npm run build
+
+# Parar todos os containers
+docker-compose down
+
+# Reconstruir containers
+docker-compose up -d --build
+```
+
+### Opção 2: Instalação Local
+
+#### Pré-requisitos
 - PHP 8.2+
 - Composer
 - Node.js 18+
 - SQLite
 
-### Instalação
+#### Instalação Local
 
 1. **Clone e instale dependências:**
    ```bash
